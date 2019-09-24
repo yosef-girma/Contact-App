@@ -1,7 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-// import Home from "./views/Home.vue";
-// import About from "./views/About.vue";
 import store from "./store/index";
 const Contact = () => import("./App.vue");
 const ContactsList = () => import("@/views/ContactList.vue");
@@ -34,7 +32,7 @@ let router = new Router({
     },
     {
       path: "/contact",
-      component: Contact,
+      component:Contact,  
       children: [
         {
           path: "/",
