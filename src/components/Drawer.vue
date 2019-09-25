@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-navigation-drawer v-model="drawer" :clipped="$vuetify.breakpoint.lgAndUp" app>
     <v-list dense>
       <template v-for="item in items">
@@ -45,12 +46,21 @@
       </template>
     </v-list>
   </v-navigation-drawer>
+    <!-- <AddGroupDlg :gdialog="gdialog"/> -->
+ <div v-if="gdialog">
+ <AddGroupDlg  :gdialog="gdialog" @update-dlg="gdialog = false"/>
+  </div>  
+  </div>
+
+ 
+
 </template>
 
 
 
 <script>
 import AddGroupDlg from "./AddGroupDlg.vue";
+
 import {EventBus}  from "@/main.js";
 
 export default {

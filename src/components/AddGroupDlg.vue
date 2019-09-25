@@ -1,13 +1,6 @@
 <template>
   <v-layout justify-center>
-    <!-- <v-tooltip bottom>
-      <template v-slot:activator="{ on }">
-        <v-btn bottom color v-on="on" fab fixed right  @click="dialog = !dialog">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </template>
-      <span>Add Group</span>
-    </v-tooltip>-->
+   
 
     <v-dialog v-model="gdialog" persistent max-width="300px">
       <v-card>
@@ -83,12 +76,8 @@ export default {
   },
   data() {
     let srcs = [
-      "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-      "https://cdn.vuetifyjs.com/images/lists/2.jpg",
-      "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-      "https://cdn.vuetifyjs.com/images/lists/5.jpg"
-    ];
+     
+        ];
     return {
       value: false,
       group: {},

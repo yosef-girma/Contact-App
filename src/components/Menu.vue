@@ -36,8 +36,11 @@
 </template>
 
 <script>
+// import Setting from './Setting'
 export default {
+  components: {},
   data: () => ({
+   
     menuitems: [
       { icon: "mdi-account-circle", text: "Profile" },
       { icon: "mdi-settings", text: "Setting" },
@@ -50,11 +53,6 @@ export default {
     }
   },
   methods: {
-    // updateComponent(component)
-    // {
-    //   this.$emit('change-component',component)
-    // }
-
     onMenuItemSelected(index) {
       switch (index) {
         case 0:
@@ -65,6 +63,10 @@ export default {
         case 1:
           console.log("please this is user id", this.userId);
           console.log("setting");
+          //this.showSettingDlg = !this.showSettingDlg
+          this.$emit("setting-clicked", true);
+        
+
           break;
         case 2:
           console.log(index, "logout");

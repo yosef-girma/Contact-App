@@ -8,7 +8,7 @@
     <v-form class="ma-4">
       <v-text-field
         class="ma-6"
-        prepend-icon="mdi-account"
+        prepend-icon="mdi-email"
         v-model="user.email"
         name="email"
         :rules="emailRules"
