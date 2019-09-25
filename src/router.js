@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import store from "./store/index";
-const Contact = () => import("./App.vue");
+const Contact = () => import("@/views/Home.vue");
 const ContactsList = () => import("@/views/ContactList.vue");
 const Favourite = () => import("@/views/Favourite.vue");
 
@@ -21,7 +21,6 @@ let router = new Router({
   routes: [
     {
       path: "/",
-      name: "home",
       component: Login
     },
 

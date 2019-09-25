@@ -1,21 +1,6 @@
 <template>
   <!-- dialog  -->
   <v-content>
-    <!-- <v-tooltip bottom>
-      <template v-slot:activator="{ on }">
-        <v-btn bottom color="pink"  v-on="on" dark fab fixed right @click="dialog = !dialog">
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      
-      </template>
-      <span>Add Contact</span>
-    </v-tooltip>-->
-
-    <!-- <div>
-       <span v-if="triggerEditContact">{{ editContact(contactId) }}</span>
-    </div>-->
-    <!-- Dialog -->
-
     <v-dialog v-model="dialog" width="800px" persistent>
       <v-card>
         <v-card-title
@@ -85,7 +70,7 @@
           <div class="flex-grow-1"></div>
           <div class="align center">
             <v-btn text color="primary" @click="onClickCancel">Cancel</v-btn>
-            {{ triggerEditContact }}
+
             <v-btn
               v-if="triggerEditContact"
               text

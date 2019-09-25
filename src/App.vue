@@ -1,90 +1,22 @@
 <template>
-  <v-app id="inspire" class="grey lighten-4" app>
-    <AppBar />
-    <Drawer />
-    
+  <v-app>
+    <v-content>
    
-   <router-view />
+      <router-view/>
+    
+    </v-content>
   </v-app>
 </template>
 
 <script>
 
-import Drawer from "@/components/Drawer";
-import AppBar from "@/components/AppBar";
-import ViewHolder from "@/components/ViewHolder";
-
 export default {
-  props: {
-    source: String
-  },
+  name: 'App',
   components: {
   
-    Drawer,
-    AppBar,
-    ViewHolder
   },
-
   data: () => ({
-    dialog: false,
-    gdialog: false,
-  
-
-    items: [
-      { icon: "mdi-contacts", text: "Contacts", route: "/contact" },
-      { icon: "mdi-star", text: "Favourite", route: "/contact/favourite" },
-      {
-        gicon: "mdi-account-group",
-        text: "Group",
-        icon: "mdi-chevron-up",
-        "icon-alt": "mdi-chevron-down",
-        model: false,
-        children: []
-      },
-      { icon: "mdi-send", text: "Send-Feedback", route: "/contact/feedback" },
-      { icon: "mdi-help", text: "Help", route: "/contact/help" }
-    ]
+    //
   }),
-
-  methods: {
-    selectGroup(id) {
-      this.$router.push({ name: "group", params: { id: id } });
-    },
-
-    getGroupName() {
-      let uri =
-        "http://localhost:3000/api/groups?filter[fields][id]=true&filter[fields][name]=true";
-      var groupList = [];
-      this.axios
-        .get(uri)
-        .then(response => {
-          var that = this;
-
-          that.items[2].children.length = 0;
-          that.items[2].children.push({
-            icon: "mdi-plus",
-            text: "Create Group",
-            id: "0"
-          });
-          response.data.forEach(function(element) {
-            var ix = { id: element.id, text: element.name };
-            that.items[2].children.push(ix);
-          });
-        })
-        .catch(err => console.log(err));
-    }
-  }
 };
 </script>
-
-<style>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter,
-.fade-leave-active {
-  opacity: 0;
-}
-</style>
-
