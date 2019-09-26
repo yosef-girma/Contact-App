@@ -1,7 +1,7 @@
 <template>
   <!-- dialog  -->
   <v-content>
-    <v-dialog v-model="dialog" width="800px" persistent>
+    <v-dialog v-model="dialog" width="800px" persistent click:outside="console.log('outside')">
       <v-card>
         <v-card-title
           v-if="triggerEditContact?cardTitle='Edit Contact':cardTitle='Create Contact'"
@@ -9,16 +9,31 @@
 
         <v-card-text>
           <v-container grid-list-md>
+
+        
+ 
             <v-layout wrap>
-              <v-flex xs12 sm6 md6>
-                <v-text-field label="First name*" v-model="contact.fname" required></v-text-field>
+          <image-input v-model="avatar">
+          <div slot="activator">
+          <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
+            <span>Click to add profile pic</span>
+          </v-avatar>
+          <v-avatar size="150px" v-ripple v-else class="mb-3">
+            <img :src="avatar.imageURL" alt="avatar">
+          </v-avatar>
+        </div>
+        </image-input>
+          
+              <v-flex xs4 sm4 md4 >
+                <v-text-field class="ml-10 mt-12" label="First name*" v-model="contact.fname" required></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 md6>
+              <v-flex xs4 sm4 md4>
                 <v-text-field
                   label="Last name*"
                   hint="optional"
                   v-model="contact.lname"
                   persistent-hint
+                  class="ml-10 mt-12"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12>
@@ -26,7 +41,7 @@
                   label="Email*"
                   required
                   hint="example@somedomain.com"
-                  prepend-icon="mdi-email"
+                 
                   persistent-hint
                   v-model="contact.email"
                 ></v-text-field>
@@ -34,7 +49,7 @@
               <v-flex xs12>
                 <v-text-field
                   label="Phone No*"
-                  prepend-icon="mdi-cellphone"
+                 
                   required
                   v-model="contact.phoneno"
                 ></v-text-field>
@@ -86,6 +101,7 @@
 </template>
 <script>
 import { bus } from "../main";
+import ImageInput from './ImageInput.vue'
 
 export default {
   props: {
@@ -97,7 +113,9 @@ export default {
     return {
       dialog: true,
       cardTitle: "",
-      contact: {}
+      contact: {},
+      avatar: null,
+    
     };
   },
 
@@ -107,7 +125,16 @@ export default {
       this.editContact(this.contactId);
     }
   },
+  components: {
+    ImageInput: ImageInput
+  },
+ 
+ 
   methods: {
+    uploadImage() {
+        
+    },
+    
     onClickCancel() {
       this.$emit("update-trigger", "");
       console.log("on cancel emit");
