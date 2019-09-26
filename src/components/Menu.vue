@@ -79,7 +79,7 @@ export default {
     logout: function() {
       console.log("logoout method called");
       this.$store.dispatch("logout").then(() => {
-        this.$router.push("login");
+        this.$router.push("/");
       });
     }
   }

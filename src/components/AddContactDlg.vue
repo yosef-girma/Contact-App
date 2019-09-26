@@ -9,23 +9,29 @@
 
         <v-card-text>
           <v-container grid-list-md>
-
-        
- 
             <v-layout wrap>
-          <image-input v-model="avatar">
-          <div slot="activator">
-          <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
-            <span>Click to add profile pic</span>
-          </v-avatar>
-          <v-avatar size="150px" v-ripple v-else class="mb-3">
-            <img :src="avatar.imageURL" alt="avatar">
-          </v-avatar>
-        </div>
-        </image-input>
-          
-              <v-flex xs4 sm4 md4 >
-                <v-text-field class="ml-10 mt-12" label="First name*" v-model="contact.fname" required></v-text-field>
+              <image-input v-model="avatar" @input="handleImageUpload">
+                <div slot="activator">
+                  <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
+                    <span>Click to add profile pic</span>
+                    <div v-if="triggerEditContact">
+                    <img :src="userImage" >
+                    {{ userImage}}
+                    </div>
+                  </v-avatar>
+                  <v-avatar size="150px" v-ripple v-else class="mb-3">
+                    <img :src="avatar.imageURL" alt="avatar" />
+                  </v-avatar>
+                </div>
+              </image-input>
+
+              <v-flex xs4 sm4 md4>
+                <v-text-field
+                  class="ml-10 mt-12"
+                  label="First name*"
+                  v-model="contact.fname"
+                  required
+                ></v-text-field>
               </v-flex>
               <v-flex xs4 sm4 md4>
                 <v-text-field
@@ -41,18 +47,12 @@
                   label="Email*"
                   required
                   hint="example@somedomain.com"
-                 
                   persistent-hint
                   v-model="contact.email"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field
-                  label="Phone No*"
-                 
-                  required
-                  v-model="contact.phoneno"
-                ></v-text-field>
+                <v-text-field label="Phone No*" required v-model="contact.phoneno"></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 md6>
                 <v-text-field label="Company" v-model="contact.company"></v-text-field>
@@ -76,6 +76,8 @@
                   value="This is clearable text."
                   v-model="contact.description"
                 ></v-textarea>
+
+                <!-- <input type="hidden" value="profilepic" v-model="contact.profilepic" /> -->
               </v-flex>
             </v-layout>
           </v-container>
@@ -101,8 +103,10 @@
 </template>
 <script>
 import { bus } from "../main";
-import ImageInput from './ImageInput.vue'
-
+import ImageInput from "./ImageInput.vue";
+// import Vue from 'vue';
+// Vue.prototype.$formData = null;
+// Vue.prototype.$imageURL = null;
 export default {
   props: {
     triggerEditContact: Boolean,
@@ -115,7 +119,10 @@ export default {
       cardTitle: "",
       contact: {},
       avatar: null,
-    
+      file: "",
+      imgFormData: null,
+      imgURL: "",
+      userImage:null
     };
   },
 
@@ -128,13 +135,42 @@ export default {
   components: {
     ImageInput: ImageInput
   },
- 
- 
+
   methods: {
-    uploadImage() {
-        
+    /*  uploadImage() {
+
+        let formData = this.$formData
+        let url = ""
+
+        formData.append('file', this.file);
+ 
+        this.$axios.post( url,
+                formData,
+                {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+              }
+            ).then(function(){
+           
+             })
+        .catch(function(){
+          console.log('FAILURE!!');
+        });
+
+    }, */
+
+    /*  handleFileUpload(){
+        this.file = this.$refs.file.files[0];
+      }, */
+    handleImageUpload(value) {
+      console.log("form data", value.formData);
+      this.imgFormData = value.formData;
+      this.imgURL = value.imageURL;
+      console.log("image url", value.imageURL);
+      console.log("emit called", this.imgURL);
     },
-    
+
     onClickCancel() {
       this.$emit("update-trigger", "");
       console.log("on cancel emit");
@@ -144,15 +180,34 @@ export default {
       let userId = localStorage.getItem("userId");
 
       let uri = this.$hostname + `BaseUsers/${userId}/contacts`;
-      this.axios
-        .post(uri, this.contact)
-        .then(response => {
-          console.log(response);
-          this.dialog = false;
-          this.contact.length = 0;
-          bus.$emit("add-to-table", response.data.id);
+
+      let formData = this.imgFormData;
+      let url = "http://localhost:3000/api/containers/profile/upload";
+
+      //    formData.append('file', this.imgURL);
+      let that = this;
+      this.$axios
+        .post(url, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
         })
-        .catch(err => console.log(err));
+        .then(function(response) {
+          let profileImg = response.data.result.files.file[0].name
+          that.contact.profilepic = profileImg
+          that.$axios
+            .post(uri, that.contact)
+            .then(response => {
+              console.log(response);
+              that.dialog = false;
+              that.contact.length = 0;
+              bus.$emit("add-to-table", response.data.id);
+            })
+            .catch(err => console.log(err));
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
     },
 
     editContact(id) {
@@ -163,6 +218,7 @@ export default {
       if (Object.keys(this.contact).length != 0) {
         //this.dialog = true
         console.log("i have something insdie and am contact", this.contact);
+        this.userImage = this.$hostname +"containers/profile/download/"+this.contact.profilepic
       } else {
         console.log("i don't ahve ");
         this.axios

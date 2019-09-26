@@ -9,6 +9,7 @@ import axios from "axios";
 Vue.use(VueAxios, axios);
 Vue.prototype.$hostname = "http://localhost:3000/api/";
 Vue.prototype.$currentUserId = localStorage.getItem("userId");
+Vue.prototype.$axios = axios
 export const EventBus = new Vue();
 
 

@@ -1,30 +1,36 @@
 <template>
   <v-container class="ma-4">
-    <v-text-field
-      v-model="search"
-      append-icon="mdi sheild-search"
-      label="Search"
-      single-line
-      hide-details
-    ></v-text-field>
-
+    <v-flex xs6 md6 class="ma-5" style="align-right">
+      <v-text-field
+        v-model="search"
+        append-icon="mdi sheild-search"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-flex>
     <v-data-table
       v-model="selected"
       :headers="headers"
       :items="contacts"
-      :single-select="singleSelect"
       :search="search"
       item-key="id"
-      show-select
       class="elevation-1"
     >
+      <!--  <template v-slot:activator="{ on }">
+          <v-avatar>
+            <img src=$hostname + `containers/profile/download/${item.profilepic}` alt="user image" />
+          </v-avatar>
+        </template>
+      -->
+
       <template v-slot:item.favourite="{ item }">
         <!-- <v-chip :color="getColor(item.calories)" dark>{{ item.calories }}</v-chip> -->
 
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-btn fab small v-on="on" @click="addToFavourite(item.id)">
-              <v-icon style="color:yellow">{{ favourite }}</v-icon>
+              <v-icon style="color:#1e90ff">{{ favourite }}</v-icon>
             </v-btn>
           </template>
           <span>Favourite</span>
@@ -37,7 +43,7 @@
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-btn fab small v-on="on" @click="editMyContact(item.id)">
-              <v-icon>{{ edit }}</v-icon>
+              <v-icon color="#1e90ff">{{ edit }}</v-icon>
             </v-btn>
           </template>
           <span>Edit Contact</span>
@@ -50,7 +56,7 @@
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-btn fab small v-on="on" @click="deleteContact(item.id)">
-              <v-icon>{{ del }}</v-icon>
+              <v-icon color="#1e90ff">{{ del }}</v-icon>
             </v-btn>
           </template>
           <span>Delete Contact</span>
@@ -88,7 +94,6 @@ export default {
       editContactId: "",
       search: "",
       selected: [],
-      singleSelect: true,
       headers: [
         {
           text: "Name",
@@ -113,7 +118,7 @@ export default {
   created() {
     let userId = localStorage.getItem("userId");
     console.log("userid", userId);
-    console.log(this.$hostname)
+    console.log(this.$hostname);
     let uri = this.$hostname + `BaseUsers/${userId}/contacts`;
     this.axios
       .get(uri)
